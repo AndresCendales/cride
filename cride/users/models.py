@@ -27,3 +27,19 @@ class User(CRideModel, AbstractUser):
     )
 
     USENAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'first_name','last_name']
+
+    is_client = models.BooleanField(
+        'client_status',
+        default=True,
+        help_text = (
+        'Help easily distinguish users and perform queries.'
+        'Clients are the main type of user'
+        )
+    )
+
+    is_verified = models.BooleanField(
+        'verified',
+        default = False,
+        help_text='Set to true when the user have verified its email address'
+    )
