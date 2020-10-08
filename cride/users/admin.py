@@ -16,7 +16,8 @@ class CustomUserAdmin(UserAdmin):
         'first_name',
         'last_name',
         'is_staff',
-        'is_client'
+        'is_client',
+        'is_verified',
     )
 
     list_filter = (
