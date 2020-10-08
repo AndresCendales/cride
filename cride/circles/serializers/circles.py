@@ -13,13 +13,13 @@ class CircleModelSerializer(serializers.ModelSerializer):
         """Meta Class."""
 
         model =Circle
-        fieldds = (
+        fields = (
             'id',
             'name',
             'slug_name',
             'about',
-            'picture'
-            'riddes_offered',
+            'picture',
+            'rides_offered',
             'rides_taken',
             'verified',
             'is_public',
