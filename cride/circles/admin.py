@@ -1,4 +1,4 @@
-""" Admin for Cicles app """
+""" Admin for Circles app """
 
 #Django 
 from django.contrib import admin

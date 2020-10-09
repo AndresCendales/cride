@@ -45,3 +45,5 @@ class CircleModelSerializer(serializers.ModelSerializer):
 
         if is_limited ^ bool(members_limit):
             raise serializers.ValidationError('If circles is limited, a member limit must be provided')
+
+        return data
