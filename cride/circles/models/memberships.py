@@ -24,7 +24,7 @@ class Membership(CRideModel):
     is_admin =   models.BooleanField(
         'circle admin',
         default=False,
-        help_text='Circcle admins can update the circles data and manage its members'
+        help_text='Circle admins can update the circles data and manage its members'
     )
 
     # Invitations
