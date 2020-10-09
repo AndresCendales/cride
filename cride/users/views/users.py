@@ -1,9 +1,9 @@
 """" Users views """
 
 #Django Rest Framework
-from rest_framework.views import  APIView
-from rest_framework import status
+from rest_framework import status, viewsets
 from rest_framework.response import Response
+from rest_framework.decorators import action
 
 #Serializer
 from cride.users.serializers import (
@@ -13,11 +13,15 @@ from cride.users.serializers import (
         AccountVerificationSerializer
         )
 
-class UserLoginApiView(APIView):
-    """User Login API View """
-    def post(self,request, *args, **kwargs):
-        """Handle http Post Request"""
 
+class UserViewSet(viewsets.GenericViewSet):
+    """ User View Set. 
+
+    Handle SignUp, Login and Account Verification."""
+
+    @action(detail=False, methods=['post'])
+    def login(self,request):
+        """ Uer Login"""
         serializer = UserLoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -28,33 +32,23 @@ class UserLoginApiView(APIView):
             'acces_token': token
         }
         return Response(data, status=status.HTTP_201_CREATED)
-    
-class UserSignUpApiView(APIView):
-    """User SignUp API View """
-    def post(self,request, *args, **kwargs):
-        """Handle http Post Request"""
 
+    @action(detail=False, methods=['post'])
+    def signup(self,request):
+        """User Sign up."""
         serializer = UserSignUpSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
         user = serializer.save()
-
         data = UserModelSerializer(user).data
-        
         return Response(data, status=status.HTTP_201_CREATED)
 
-
-class AccountVerificationApiView(APIView):
-    """User Verification API View """
-    def post(self,request, *args, **kwargs):
-        """Handle http Post Request"""
-
+    @action(detail=False,methods=['post'])
+    def verify(self,request):
+        """Account Verification"""
         serializer = AccountVerificationSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
         data = {
             'message':'Congratulations, now go share some rides'
         }
-        
         return Response(data, status=status.HTTP_200_OK)
