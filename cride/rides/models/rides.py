@@ -16,7 +16,8 @@ class Ride(CRideModel):
         on_delete=models.SET_NULL,
         null=True
         )
-    offeded_in = models.ForeignKey(
+    
+    offered_in = models.ForeignKey(
         "circles.Circle",
         on_delete=models.SET_NULL,
         null=True
