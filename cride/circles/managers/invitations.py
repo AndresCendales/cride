@@ -12,12 +12,12 @@ class InvitationManager(models.Manager):
 
     User to handle code creation. 
     """
-    CODE_LENGHT = 10
-    def create(self,*args, **kwargs):
-        """Handle code creation. """
-        pool = ascii_uppercase + digits
-        code = kwargs.get('code', ''.join(random.choices(pool=CODE_LENGHT)))
-        while self.filter(code=code).exists:
-            code = ''.join(random.choices(pool=CODE_LENGHT))
-        kwargs['code']=code
-        return super(InvitationManager,self).create(**kwargs)
+    CODE_LENGTH = 10
+    def create(self, **kwargs):
+        """Handle code creation."""
+        pool = ascii_uppercase + digits + '.-'
+        code = kwargs.get('code', ''.join(random.choices(pool, k=self.CODE_LENGTH)))
+        while self.filter(code=code).exists():
+            code = ''.join(random.choices(pool, k=self.CODsE_LENGTH))
+        kwargs['code'] = code
+        return super(InvitationManager, self).create(**kwargs)
