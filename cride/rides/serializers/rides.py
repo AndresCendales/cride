@@ -11,7 +11,18 @@ from cride.circles.models import Membership
 from datetime import timedelta
 from django.utils import timezone
 
+class RideModelSerializer(serializers.ModelSerializer):
+    """Ride Model Serializer class """
 
+    class Meta:
+        """Meta Class """
+        model = Ride
+        fields = '__all__'
+        read_only_fields = (
+            'offered_in',
+            'offered_in',
+            'rating',
+        )
 class CreateRideSerializer(serializers.ModelSerializer):
     """ Create ride serializer """
 
@@ -65,23 +76,25 @@ class CreateRideSerializer(serializers.ModelSerializer):
         self.context['membership']= membership
         return data
 
-def create(self, data):
-        """Create ride and update stats."""
-        circle = self.context['circle']
-        ride = Ride.objects.create(**data, offered_in=circle)
+    def create(self, data):
+            """Create ride and update stats."""
+            circle = self.context['circle']
+            ride = Ride.objects.create(**data, offered_in=circle)
 
-        # Circle
-        circle.rides_offered += 1
-        circle.save()
+            # Circle
+            circle.rides_offered += 1
+            circle.save()
 
-        # Membership
-        membership = self.context['membership']
-        membership.rides_offered += 1
-        membership.save()
+            # Membership
+            membership = self.context['membership']
+            membership.rides_offered += 1
+            membership.save()
 
-        # Profile
-        profile = data['offered_by'].profile
-        profile.rides_offered += 1
-        profile.save()
+            # Profile
+            profile = data['offered_by'].profile
+            profile.rides_offered += 1
+            profile.save()
 
-        return ride
+            return ride
+
+

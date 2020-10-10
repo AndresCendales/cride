@@ -9,17 +9,32 @@ from rest_framework.permissions import IsAuthenticated
 from cride.circles.permissions.memberships import IsActiveCircleMember
 
 # Serializer
-from cride.rides.serializers import CreateRideSerializer
+from cride.rides.serializers import (
+                                    CreateRideSerializer, 
+                                    RideModelSerializer,
+                                )
+
+# Filters
+from rest_framework.filters import SearchFilter, OrderingFilter
+
 
 # Models 
 from cride.circles.models import Circle
 
+# Utils 
+from datetime import timedelta
+from django.utils import timezone
+
 class RideViewSet(mixins.CreateModelMixin,
+                    mixins.ListModelMixin,
                     viewsets.GenericViewSet):
     """ Ride View Set """
 
-    serializer_class = CreateRideSerializer
     permission_classes = [IsAuthenticated, IsActiveCircleMember]
+    filter_backends = (SearchFilter,OrderingFilter)
+    ordering = ('departure_date','arrival_date','avaliable_seats')
+    ordering_fields = ('departure_date','arrival_date','avaliable_seats')
+    search_fields = ('departure_location','arrival_location')
 
     def dispatch(self, request, *args, **kwargs):
         """Verify that the circle exists."""
@@ -32,3 +47,20 @@ class RideViewSet(mixins.CreateModelMixin,
         context = super(RideViewSet, self).get_serializer_context()
         context['circle'] = self.circle
         return context
+    
+    def get_serializer_class(self):
+        """ Return serializer based on action."""
+        if self.action == 'create':
+            return CreateRideSerializer
+        return RideModelSerializer
+
+    def get_queryset(self):
+        """ Return active circles rides."""
+        offset = timezone.now() + timedelta(minutes=10)
+
+        return self.circle.ride_set.filter(
+            departure_date__gte=offset,
+            is_active=True,
+            avaliable_seats__gte=1,
+        )
+    

@@ -45,7 +45,7 @@ class Ride(CRideModel):
         )
     is_active = models.BooleanField(
         'active status',
-        default=False,
+        default=True,
         help_text='Used for disabling the ride or marking it has finished'
         )
 
