@@ -9,7 +9,7 @@ from cride.circles.models import Membership
 # Serializers
 from cride.users.serializers import UserModelSerializer
 
-class MembershipModelSerializers(serializers.ModelSerializer):
+class MembershipModelSerializer(serializers.ModelSerializer):
     """Member model Serializer"""
     user = UserModelSerializer(read_only=True)
     invited_by = serializers.StringRelatedField()

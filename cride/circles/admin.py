@@ -4,7 +4,7 @@
 from django.contrib import admin
 
 #Models
-from cride.circles.models import Circle, Membership
+from cride.circles.models import Circle, Membership, Invitation
 
 @admin.register(Circle)
 class CircleAdmin(admin.ModelAdmin):
@@ -52,4 +52,23 @@ class MembershipAdmin(admin.ModelAdmin):
     list_filter = (
         'user',
         'circle',
+    )
+@admin.register(Invitation)
+class InvitationAdmin(admin.ModelAdmin):
+    """Invitation Admin"""
+
+    list_display = (
+        'code',
+        'issued_by',
+        'circle',
+        'used',
+        'used_at',
+    )
+
+    list_filter = (
+        'code',
+        'issued_by',
+        'circle',
+        'used',
+        'used_at',
     )
