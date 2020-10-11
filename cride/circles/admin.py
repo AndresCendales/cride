@@ -30,6 +30,18 @@ class CircleAdmin(admin.ModelAdmin):
         'is_limited',
     )
 
+    actions = ['make_verified','make_unverified']
+
+    def make_verified(self,request, queryset):
+        """Make circles verified"""
+        queryset.update(verified=True)
+    make_verified.short_description = 'Make selected circles verified'
+
+    def make_unverified(self,request, queryset):
+        """Make circles verified"""
+        queryset.update(verified=False)
+    make_unverified.short_description = 'Make selected circles unverified'
+
 @admin.register(Membership)
 class MembershipAdmin(admin.ModelAdmin):
     """Membership  admin."""
@@ -72,3 +84,4 @@ class InvitationAdmin(admin.ModelAdmin):
         'used',
         'used_at',
     )
+
