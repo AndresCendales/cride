@@ -7,7 +7,7 @@ from django.template.loader import render_to_string
 from django.utils import timezone
 
 # Celery
-from celery.decorators import task
+from celery.decorators import task, periodic_task
 
 # Utilities
 from datetime import timedelta
@@ -16,6 +16,7 @@ import time
 
 # Models
 from cride.users.models import User
+from cride.rides.models import Ride
 
 
 def gen_verification_token(user):
@@ -49,3 +50,16 @@ def send_confirmation_email(user_pk):
     msg.attach_alternative(content, "text/html")
     msg.send()
 
+@periodic_task(name='disable_finished_rides',run_every=timedelta(seconds=5))
+def disable_finished_rides():
+    """Disable finished rides"""
+    now = timezone.now()
+    offset = now + timedelta(seconds=5)
+
+    # Update rides that have already finished
+    rides = Ride.objects.filter(
+        arrival_date__gte=now,
+        arrival_date__lte=offset,
+        is_active=True,
+        )
+    rides.update(is_active=False)
